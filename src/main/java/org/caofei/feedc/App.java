@@ -1,12 +1,7 @@
 package org.caofei.feedc;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -22,6 +17,7 @@ import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 
+import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
@@ -73,8 +69,10 @@ public class App {
 	}
 
 	private static void setProxy() throws MalformedURLException, IOException {
-		 System.setProperty("http.proxyHost", "172.16.131.7");
-		 System.setProperty("http.proxyPort", "3128");
+//		 System.setProperty("http.proxyHost", "172.16.131.7");
+//		 System.setProperty("http.proxyPort", "3128");
+//		 System.setProperty("http.proxyHost", "172.16.131.7");
+//		 System.setProperty("http.proxyPort", "3128");
 //		 System.out.println(IOUtils.readLines(new
 //		 URL("http://cnbeta.com/backend.php").openStream()));
 //		 IOUtils.copy(new
@@ -104,8 +102,13 @@ public class App {
 
 	private static void pullFeed() throws ClientProtocolException, IOException, IllegalArgumentException, FeedException {
 		SyndFeedInput input = new SyndFeedInput();
-		SyndFeed feed = input.build(new XmlReader(new URL("http://cnbeta.com/backend.php")));
+		String feedRoot = "http://cnbeta.com/backend.php";
+		//feedRoot = "http://t66y.com/rss.php?fid=7";
+		SyndFeed feed = input.build(new XmlReader(new URL(feedRoot)));
 		System.out.println(feed.getTitle());
+		SyndEntry entry =  (SyndEntry) feed.getEntries().get(0);
+		System.out.println(entry.getLink());
+		String u = "GET /api/content/v1/parser?url=http://blog.readability.com/2011/02/step-up-be-heard-readability-ideas/&token=1b830931777ac7c2ac954e9f0d67df437175e66e";
 		if(true)return;
 		HttpHost proxy = new HttpHost("172.16.131.7", 3128, "http");
 		HttpClient httpclient = new DefaultHttpClient();
@@ -115,7 +118,7 @@ public class App {
 				CoreProtocolPNames.HTTP_ELEMENT_CHARSET, "UTF-8");
 
 		// Prepare a request object
-		HttpGet httpget = new HttpGet("http://cnbeta.com/backend.php");
+		HttpGet httpget = new HttpGet(feedRoot);
 		// HttpGet httpget = new HttpGet("http://baidu.com");
 
 		// Execute the request
