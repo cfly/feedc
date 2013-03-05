@@ -43,12 +43,11 @@ public class App {
 	}
 	public static void main(String[] args) {
 		System.out.println("Hello World!");
-		prepareMaps();
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			System.out.println(kv.get(arg));
+			process(arg);
 		}
-		//process();
 //		try {
 //			List<String> lines = IOUtils.readLines(new FileReader("./index.rss"));
 //			for (String line : lines) {
@@ -63,14 +62,10 @@ public class App {
 //		}
 	}
 
-	private static void prepareMaps() {
-//		kv		
-	}
-
-	private static void process() {
+	private static void process(String rssUrl) {
 		try {
 			setProxy();
-			pullFeed();
+			pullFeed(rssUrl);
 			genBean();
 			readablityAPI();
 			genEntity();
@@ -122,11 +117,11 @@ public class App {
 
 	}
 
-	private static void pullFeed() throws ClientProtocolException, IOException, IllegalArgumentException, FeedException {
+	private static void pullFeed(String rssUrl) throws ClientProtocolException, IOException, IllegalArgumentException, FeedException {
 		SyndFeedInput input = new SyndFeedInput();
-		String feedRoot = "http://cnbeta.com/backend.php";
+//		String feedRoot = "http://cnbeta.com/backend.php";
 		//feedRoot = "http://t66y.com/rss.php?fid=7";
-		SyndFeed feed = input.build(new XmlReader(new URL(feedRoot)));
+		SyndFeed feed = input.build(new XmlReader(new URL(rssUrl)));
 		System.out.println(feed.getTitle());
 		SyndEntry entry =  (SyndEntry) feed.getEntries().get(0);
 		System.out.println(entry.getLink());
@@ -140,7 +135,7 @@ public class App {
 				CoreProtocolPNames.HTTP_ELEMENT_CHARSET, "UTF-8");
 
 		// Prepare a request object
-		HttpGet httpget = new HttpGet(feedRoot);
+		HttpGet httpget = new HttpGet("");
 		// HttpGet httpget = new HttpGet("http://baidu.com");
 
 		// Execute the request
