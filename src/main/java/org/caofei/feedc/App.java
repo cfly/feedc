@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -28,11 +32,21 @@ import com.sun.syndication.io.XmlReader;
  * 
  */
 public class App {
+	private static final Map<String,String> kv = new HashMap<String,String>();
+	static{
+		ResourceBundle kvprop = ResourceBundle.getBundle("kv");
+		Enumeration<String> keys = kvprop.getKeys();
+		while(keys.hasMoreElements()){
+			String key = keys.nextElement();
+			kv.put(key, kvprop.getString(key));
+		}
+	}
 	public static void main(String[] args) {
 		System.out.println("Hello World!");
+		prepareMaps();
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-			System.out.println(arg);
+			System.out.println(kv.get(arg));
 		}
 		//process();
 //		try {
@@ -47,6 +61,10 @@ public class App {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
+	}
+
+	private static void prepareMaps() {
+//		kv		
 	}
 
 	private static void process() {
