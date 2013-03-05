@@ -30,7 +30,11 @@ import com.sun.syndication.io.XmlReader;
 public class App {
 	public static void main(String[] args) {
 		System.out.println("Hello World!");
-		process();
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			System.out.println(arg);
+		}
+		//process();
 //		try {
 //			List<String> lines = IOUtils.readLines(new FileReader("./index.rss"));
 //			for (String line : lines) {
