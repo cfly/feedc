@@ -28,7 +28,7 @@ public class ThreadFetchContent implements Callable {
 			lines = App.readablityAPI(syndEntry.getLink());
 
 		if(lines!=null && !lines.isEmpty()){
-			syndContent.setValue(lines.get(0));
+			syndContent.setValue("<![CDATA[" + lines.get(0)+"]]>");
 		}
 		List<SyndContent> contents = new LinkedList<SyndContent>();
 		contents.add(syndContent);
