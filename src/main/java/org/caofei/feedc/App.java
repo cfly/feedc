@@ -15,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -105,15 +107,25 @@ public class App {
 		SyndFeed feed = input.build(new XmlReader(new URL(rssUrl)));
 		System.out.println(feed.getTitle());
 		List<SyndEntry> entries = feed.getEntries();
-
+		List<Future> futures = new LinkedList<Future>();
 		for (int i = 0; i < entries.size(); i++) {
 			SyndEntry syndEntry = entries.get(i);
 			System.out.println("entries\t" + i + "/" + entries.size() + "\t" + syndEntry.getLink());
 			// }
 			// for(SyndEntry syndEntry : entries) {
-			fetchContent(syndEntry);
+			futures.add(fetchContent(syndEntry));
 		}
-
+		for (Future future : futures) {
+			try {
+				future.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		String fileStr = kv.get(rssUrl);
 		File file = new File(fileStr);
 		file.getParentFile().mkdirs();
@@ -127,9 +139,9 @@ public class App {
 		// System.out.println(entry.getLink());
 	}
 
-	private static void fetchContent(SyndEntry syndEntry)
+	private static Future fetchContent(SyndEntry syndEntry)
 			throws ClientProtocolException, IOException {
-		new ThreadFetchContent(syndEntry).start();
+		return ThreadFetchContent.submit(new ThreadFetchContent(syndEntry));
 	}
 
 	private static Pattern regx = Pattern.compile("<content>(.*)</content>",
