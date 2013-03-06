@@ -23,11 +23,7 @@ public class ThreadFetchContent implements Callable {
 	public SyndEntry call() {
 
 		SyndContent syndContent = null;
-		try {
-			syndContent = (SyndContent) syndEntry.getDescription().clone();
-		} catch (CloneNotSupportedException e1) {
-			e1.printStackTrace();
-		}
+		syndContent = (SyndContent) syndEntry.getDescription();
 		List<String> lines;
 		try {
 			lines = App.readablityAPI(syndEntry.getLink());
@@ -35,9 +31,6 @@ public class ThreadFetchContent implements Callable {
 		if(lines!=null && !lines.isEmpty()){
 			syndContent.setValue("<![CDATA[" + lines.get(0)+"]]>");
 		}
-		List<SyndContent> contents = new LinkedList<SyndContent>();
-		contents.add(syndContent);
-		syndEntry.setContents(contents);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
