@@ -87,8 +87,8 @@ public class App {
 	}
 
 	private static void setProxy() throws MalformedURLException, IOException {
-		System.setProperty("http.proxyHost", "172.16.131.7");
-		System.setProperty("http.proxyPort", "3128");
+//		System.setProperty("http.proxyHost", "172.16.131.7");
+//		System.setProperty("http.proxyPort", "3128");
 		// System.setProperty("http.proxyHost", "172.16.131.7");
 		// System.setProperty("http.proxyPort", "3128");
 		// System.out.println(IOUtils.readLines(new
@@ -174,10 +174,10 @@ public class App {
 	private static List<String> curl(String url)
 			throws ClientProtocolException, IOException {
 		List<String> lines = null;
-		HttpHost proxy = new HttpHost("172.16.131.7", 3128, "http");
+//		HttpHost proxy = new HttpHost("172.16.131.7", 3128, "http");
 		HttpClient httpclient = new DefaultHttpClient();
-		httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
-				proxy);
+//		httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
+//				proxy);
 		httpclient.getParams().setParameter(
 				CoreProtocolPNames.HTTP_ELEMENT_CHARSET, "UTF-8");
 
