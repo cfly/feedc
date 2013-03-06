@@ -109,7 +109,7 @@ public class App {
 		System.out.println(feed.getTitle());
 		List<SyndEntry> entries = feed.getEntries();
 		List<Future> futures = new LinkedList<Future>();
-		for (int i = 0; i < 5 && i < entries.size(); i++) {
+		for (int i = 0; i < 4 && i < entries.size(); i++) {
 			SyndEntry syndEntry = entries.get(i);
 			System.out.println("entries\t" + i + "/" + entries.size() + "\t"
 					+ syndEntry.getLink());
