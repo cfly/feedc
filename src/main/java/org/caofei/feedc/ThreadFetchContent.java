@@ -22,7 +22,12 @@ public class ThreadFetchContent implements Callable {
 	@Override
 	public SyndEntry call() {
 
-		SyndContent syndContent = syndEntry.getDescription();
+		SyndContent syndContent = null;
+		try {
+			syndContent = (SyndContent) syndEntry.getDescription().clone();
+		} catch (CloneNotSupportedException e1) {
+			e1.printStackTrace();
+		}
 		List<String> lines;
 		try {
 			lines = App.readablityAPI(syndEntry.getLink());
