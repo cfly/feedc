@@ -15,6 +15,7 @@ import com.sun.syndication.feed.synd.SyndEntry;
 
 public class ThreadFetchContent implements Callable {
 	private SyndEntry syndEntry;
+
 	public ThreadFetchContent(SyndEntry syndEntry) {
 		this.syndEntry = syndEntry;
 	}
@@ -22,17 +23,14 @@ public class ThreadFetchContent implements Callable {
 	@Override
 	public SyndEntry call() {
 
-		SyndContent syndContent = syndEntry.getDescription();
+		SyndContent syndContent = null;
+		syndContent = (SyndContent) syndEntry.getDescription();
 		List<String> lines;
 		try {
 			lines = App.readablityAPI(syndEntry.getLink());
-
-		if(lines!=null && !lines.isEmpty()){
-			syndContent.setValue("<![CDATA[" + lines.get(0)+"]]>");
-		}
-		List<SyndContent> contents = new LinkedList<SyndContent>();
-		contents.add(syndContent);
-		syndEntry.setContents(contents);
+			if (lines != null && !lines.isEmpty()) {
+				syndContent.setValue("<![CDATA[" + lines.get(0) + "]]>");
+			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,12 +40,15 @@ public class ThreadFetchContent implements Callable {
 		}
 		return syndEntry;
 	}
-	
-	private static final ExecutorService executor = Executors.newFixedThreadPool(10);
-	static final Future submit(ThreadFetchContent task){
+
+	private static final ExecutorService executor = Executors
+			.newFixedThreadPool(10);
+
+	static final Future submit(ThreadFetchContent task) {
 		return executor.submit(task);
 	}
-	static final void shutdown(){
+
+	static final void shutdown() {
 		executor.shutdown();
 	}
 }
