@@ -89,8 +89,8 @@ public class App {
 	}
 
 	private static void setProxy() throws MalformedURLException, IOException {
-//		System.setProperty("http.proxyHost", "172.16.131.7");
-//		System.setProperty("http.proxyPort", "3128");
+		// System.setProperty("http.proxyHost", "172.16.131.7");
+		// System.setProperty("http.proxyPort", "3128");
 		// System.setProperty("http.proxyHost", "172.16.131.7");
 		// System.setProperty("http.proxyPort", "3128");
 		// System.out.println(IOUtils.readLines(new
@@ -108,9 +108,10 @@ public class App {
 		System.out.println(feed.getTitle());
 		List<SyndEntry> entries = feed.getEntries();
 		List<Future> futures = new LinkedList<Future>();
-		for (int i = 0; i < entries.size(); i++) {
+		for (int i = 0; i < 5 && i < entries.size(); i++) {
 			SyndEntry syndEntry = entries.get(i);
-			System.out.println("entries\t" + i + "/" + entries.size() + "\t" + syndEntry.getLink());
+			System.out.println("entries\t" + i + "/" + entries.size() + "\t"
+					+ syndEntry.getLink());
 			// }
 			// for(SyndEntry syndEntry : entries) {
 			futures.add(fetchContent(syndEntry));
@@ -130,7 +131,7 @@ public class App {
 		File file = new File(fileStr);
 		file.getParentFile().mkdirs();
 		file.createNewFile();
-			
+
 		Writer writer = new FileWriter(kv.get(rssUrl));
 		SyndFeedOutput output = new SyndFeedOutput();
 		output.output(feed, writer);
@@ -184,16 +185,16 @@ public class App {
 	private static List<String> curl(String url)
 			throws ClientProtocolException, IOException {
 		List<String> lines = null;
-//		HttpHost proxy = new HttpHost("172.16.131.7", 3128, "http");
+		// HttpHost proxy = new HttpHost("172.16.131.7", 3128, "http");
 		HttpClient httpclient = new DefaultHttpClient();
-//		httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
-//				proxy);
+		// httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
+		// proxy);
 		httpclient.getParams().setParameter(
 				CoreProtocolPNames.HTTP_ELEMENT_CHARSET, "UTF-8");
 
 		// Prepare a request object
 		HttpGet httpget = new HttpGet(url);
-		
+
 		// Execute the request
 		HttpResponse response = httpclient.execute(httpget);
 
