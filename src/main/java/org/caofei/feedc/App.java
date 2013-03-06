@@ -111,14 +111,7 @@ public class App {
 			System.out.println("entries\t" + i + "/" + entries.size() + "\t" + syndEntry.getLink());
 			// }
 			// for(SyndEntry syndEntry : entries) {
-			SyndContent syndContent = syndEntry.getDescription();
-			List<String> lines = readablityAPI(syndEntry.getLink());
-			if(lines!=null && !lines.isEmpty()){
-				syndContent.setValue(lines.get(0));
-			}
-			List<SyndContent> contents = new LinkedList<SyndContent>();
-			contents.add(syndContent);
-			syndEntry.setContents(contents);
+			fetchContent(syndEntry);
 		}
 
 		String fileStr = kv.get(rssUrl);
@@ -134,10 +127,15 @@ public class App {
 		// System.out.println(entry.getLink());
 	}
 
+	private static void fetchContent(SyndEntry syndEntry)
+			throws ClientProtocolException, IOException {
+		new ThreadFetchContent(syndEntry).start();
+	}
+
 	private static Pattern regx = Pattern.compile("<content>(.*)</content>",
 			Pattern.DOTALL);
 
-	private static List<String> readablityAPI(String url)
+	static List<String> readablityAPI(String url)
 			throws ClientProtocolException, IOException {
 		String api = "https://readability.com/api/content/v1/parser?token="
 				+ TOKEN + "&format=xml&url=";
