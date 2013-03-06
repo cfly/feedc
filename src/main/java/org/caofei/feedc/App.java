@@ -63,6 +63,7 @@ public class App {
 			System.out.println(kv.get(arg));
 			process(arg);
 		}
+		ThreadFetchContent.shutdown();
 	}
 
 	private static void process(String rssUrl) {

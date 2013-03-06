@@ -47,4 +47,7 @@ public class ThreadFetchContent implements Callable {
 	static final Future submit(ThreadFetchContent task){
 		return executor.submit(task);
 	}
+	static final void shutdown(){
+		executor.shutdown();
+	}
 }
