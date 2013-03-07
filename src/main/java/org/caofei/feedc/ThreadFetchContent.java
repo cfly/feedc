@@ -1,7 +1,6 @@
 package org.caofei.feedc;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +28,7 @@ public class ThreadFetchContent implements Callable {
 			lines = App.readablityAPI(syndEntry.getLink());
 
 		if(lines!=null && !lines.isEmpty()){
+			syndContent.setType("text/xml");
 			syndContent.setValue("<![CDATA[" + lines.get(0)+"]]>");
 		}
 		} catch (ClientProtocolException e) {

@@ -1,8 +1,6 @@
 package org.caofei.feedc;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,17 +19,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 
-import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
@@ -109,7 +105,10 @@ public class App {
 		System.out.println(feed.getTitle());
 		List<SyndEntry> entries = feed.getEntries();
 		List<Future> futures = new LinkedList<Future>();
-		for (int i = 0; i < 5 && i < entries.size(); i++) {
+		for (int i = entries.size(); i > 5; i--) {
+			entries.remove(i-1);			
+		}
+		for (int i = 0; i < entries.size(); i++) {
 			SyndEntry syndEntry = entries.get(i);
 			System.out.println("entries\t" + i + "/" + entries.size() + "\t"
 					+ syndEntry.getLink());
@@ -162,10 +161,16 @@ public class App {
 			lines.clear();
 			Matcher matcher = regx.matcher(sb.toString());
 			if (matcher.find()) {
-				lines.add(matcher.group(1));
+				lines.add(unfilter(matcher.group(1)));
 			}
 		}
 		return lines;
+	}
+
+	private static String unfilter(String group) {
+		String[] searchList = {"&lt;","&gt;","&amp;","&quot;","&#39;"};
+		String[] replacementList={"<",">","&","\"","'"};;
+		return StringUtils.replaceEach(group, searchList, replacementList);
 	}
 
 	private static void persistence() {
