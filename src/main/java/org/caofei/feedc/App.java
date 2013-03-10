@@ -105,7 +105,7 @@ public class App {
 		System.out.println(feed.getTitle());
 		List<SyndEntry> entries = feed.getEntries();
 		List<Future> futures = new LinkedList<Future>();
-		for (int i = entries.size(); i > 5; i--) {
+		for (int i = entries.size(); i > 8; i--) {
 			entries.remove(i-1);			
 		}
 		for (int i = 0; i < entries.size(); i++) {
