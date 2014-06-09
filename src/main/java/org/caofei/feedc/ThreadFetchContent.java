@@ -23,9 +23,8 @@ public class ThreadFetchContent implements Callable {
 	@Override
 	public SyndEntry call() {
 
-		SyndContent syndContent = null;
 		try {
-			syndContent = (SyndContent) syndEntry.getDescription().clone();
+            SyndContent syndContent = (SyndContent) syndEntry.getDescription().clone();
 			List<SyndContent> contents = new LinkedList<SyndContent>();
 			contents.add(syndContent);
 			syndEntry.setContents(contents);
@@ -51,11 +50,11 @@ public class ThreadFetchContent implements Callable {
 	private static final ExecutorService executor = Executors
 			.newFixedThreadPool(10);
 
-	static final Future submit(ThreadFetchContent task) {
+	static Future submit(ThreadFetchContent task) {
 		return executor.submit(task);
 	}
 
-	static final void shutdown() {
+	static void shutdown() {
 		executor.shutdown();
 	}
 }
